@@ -120,4 +120,38 @@ class UserRepositoryTest {
 
         userRepository.findAll(example).forEach(System.out::println);
     }
+
+    @Test
+    void getUsersWithSorting() {
+        List<User> result = userRepository.findByName("hoon", Sort.by(
+                Sort.Order.desc("id"),
+                Sort.Order.asc("email")
+        ));
+
+        System.out.println(result);
+    }
+
+    @Test
+    void getFirstPageWithPaging() {
+        Page<User> page = userRepository.findByName("hoon", PageRequest.of(0, 1, Sort.by(
+                Sort.Order.desc("id"),
+                Sort.Order.asc("email")
+        )));
+
+        List<User> content = page.getContent();
+        System.out.println(page.getTotalPages() + "페이지 중에 " + (page.getPageable().getPageNumber() + 1) + "페이지");
+        System.out.println(content);
+    }
+
+    @Test
+    void getSecondPageWithPaging() {
+        Page<User> page = userRepository.findByName("hoon", PageRequest.of(1, 1, Sort.by(
+                Sort.Order.desc("id"),
+                Sort.Order.asc("email")
+        )));
+
+        List<User> content = page.getContent();
+        System.out.println(page.getTotalPages() + "페이지 중에 " + (page.getPageable().getPageNumber() + 1) + "페이지");
+        System.out.println(content);
+    }
 }
