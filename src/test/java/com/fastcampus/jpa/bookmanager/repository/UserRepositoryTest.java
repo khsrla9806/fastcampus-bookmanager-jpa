@@ -1,5 +1,6 @@
 package com.fastcampus.jpa.bookmanager.repository;
 
+import com.fastcampus.jpa.bookmanager.domain.Gender;
 import com.fastcampus.jpa.bookmanager.domain.User;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -9,8 +10,10 @@ import org.springframework.data.domain.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import static com.fastcampus.jpa.bookmanager.domain.Gender.MALE;
 import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.endsWith;
 
 @SpringBootTest
@@ -153,5 +156,16 @@ class UserRepositoryTest {
         List<User> content = page.getContent();
         System.out.println(page.getTotalPages() + "페이지 중에 " + (page.getPageable().getPageNumber() + 1) + "페이지");
         System.out.println(content);
+    }
+
+    @Test
+    void testEnumWithNativeQuery() {
+        User user = userRepository.findById(1L).orElseThrow(RuntimeException::new);
+        user.setGender(MALE);
+        userRepository.save(user);
+        System.out.println("JPA 쿼리 메소드 결과 성별 = " + userRepository.findAll().get(0).getGender());
+
+        Map<String, Object> rawQueryResult = userRepository.findRawData();
+        System.out.println("Native Query Raw Data 결과 성별 = " + rawQueryResult.get("gender"));
     }
 }
