@@ -162,10 +162,12 @@ class UserRepositoryTest {
 
     @Test
     void testEnumWithNativeQuery() {
-        User user = userRepository.findById(1L).orElseThrow(RuntimeException::new);
+        User user = new User();
+        user.setName("testEnum");
+        user.setEmail("testEnum@naver.com");
         user.setGender(MALE);
         userRepository.save(user);
-        System.out.println("JPA 쿼리 메소드 결과 성별 = " + userRepository.findAll().get(0).getGender());
+        System.out.println("JPA 쿼리 메소드 결과 성별 = " + userRepository.findByName("testEnum").get().getGender());
 
         Map<String, Object> rawQueryResult = userRepository.findRawData();
         System.out.println("Native Query Raw Data 결과 성별 = " + rawQueryResult.get("gender"));
@@ -174,30 +176,35 @@ class UserRepositoryTest {
     @Test
     void prePersistTest() {
         User user = new User();
-        user.setName("hoonsb");
-        user.setEmail("hoonsb@naver.com");
+        user.setName("prePersist");
+        user.setEmail("prePersist@naver.com");
         userRepository.save(user);
 
-        System.out.println(userRepository.findByName("hoonsb"));
+        System.out.println(userRepository.findByName("prePersist"));
     }
 
     @Test
     void preUpdateTest() {
-        User user = userRepository.findById(1L).orElseThrow(RuntimeException::new);
-        user.setEmail("hoonsbtest@naver.com");
+        User user = new User();
+        user.setName("preUpdate");
+        user.setEmail("preUpdate@naver.com");
         userRepository.save(user);
 
-        System.out.println(userRepository.findById(1L));
+        User user2 = userRepository.findByName("preUpdate").orElseThrow(RuntimeException::new);
+        user2.setEmail("preUpdateTest@naver.com");
+        userRepository.save(user2);
+
+        System.out.println(userRepository.findByName("preUpdate"));
     }
 
     @Test
     void userHistoryTest() {
         User user = new User();
-        user.setEmail("hunsope@naver.com");
-        user.setName("hunsope");
+        user.setEmail("userHistory@naver.com");
+        user.setName("userHistory");
         userRepository.save(user);
 
-        user.setEmail("husopetest@naver.com");
+        user.setEmail("userHistoryTest@naver.com");
         userRepository.save(user);
 
         userHistoryRepository.findAll().forEach(System.out::println);
