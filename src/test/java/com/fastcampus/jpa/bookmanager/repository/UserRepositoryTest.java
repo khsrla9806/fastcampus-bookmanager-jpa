@@ -21,6 +21,9 @@ class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserHistoryRepository userHistoryRepository;
+
 
     @Test
     void getUsersByNothingAndId() {
@@ -185,5 +188,18 @@ class UserRepositoryTest {
         userRepository.save(user);
 
         System.out.println(userRepository.findById(1L));
+    }
+
+    @Test
+    void userHistoryTest() {
+        User user = new User();
+        user.setEmail("hunsope@naver.com");
+        user.setName("hunsope");
+        userRepository.save(user);
+
+        user.setEmail("husopetest@naver.com");
+        userRepository.save(user);
+
+        userHistoryRepository.findAll().forEach(System.out::println);
     }
 }
