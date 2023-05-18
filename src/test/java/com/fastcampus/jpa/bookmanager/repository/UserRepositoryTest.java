@@ -1,6 +1,5 @@
 package com.fastcampus.jpa.bookmanager.repository;
 
-import com.fastcampus.jpa.bookmanager.domain.Gender;
 import com.fastcampus.jpa.bookmanager.domain.User;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
@@ -167,5 +166,24 @@ class UserRepositoryTest {
 
         Map<String, Object> rawQueryResult = userRepository.findRawData();
         System.out.println("Native Query Raw Data 결과 성별 = " + rawQueryResult.get("gender"));
+    }
+
+    @Test
+    void prePersistTest() {
+        User user = new User();
+        user.setName("hoonsb");
+        user.setEmail("hoonsb@naver.com");
+        userRepository.save(user);
+
+        System.out.println(userRepository.findByName("hoonsb"));
+    }
+
+    @Test
+    void preUpdateTest() {
+        User user = userRepository.findById(1L).orElseThrow(RuntimeException::new);
+        user.setEmail("hoonsbtest@naver.com");
+        userRepository.save(user);
+
+        System.out.println(userRepository.findById(1L));
     }
 }

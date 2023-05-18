@@ -11,8 +11,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @Entity
+@EntityListeners(value = MyEntityListener.class)
 @Table(name = "user", indexes = {@Index(columnList = "name")}, uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
-public class User {
+public class User implements Auditable {
     @Id
     @GeneratedValue
     private Long id;
@@ -27,4 +28,5 @@ public class User {
     private LocalDateTime updatedAt;
     @Transient // 영속 대상에서 제외
     private String testData;
+
 }
