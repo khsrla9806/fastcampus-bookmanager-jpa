@@ -6,9 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @NoArgsConstructor
 @Data
@@ -19,9 +17,12 @@ public class Book extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String name;
-
-    private String author;
+    private String category;
+    private Long authorId;
+    private Long publisherId;
+    @OneToOne(mappedBy = "book")
+    @ToString.Exclude // 순환참조 문제 = 양방향성 참조에 의해서 발생
+    private BookReviewInfo bookReviewInfo;
 
 }
