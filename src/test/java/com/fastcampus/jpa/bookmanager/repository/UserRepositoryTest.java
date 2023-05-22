@@ -215,5 +215,7 @@ class UserRepositoryTest {
                 .orElseThrow(RuntimeException::new)
                 .getUserHistories()
                 .forEach(System.out::println);
+
+        System.out.println("(User) => " + userHistoryRepository.findAll().get(0));
     }
 }

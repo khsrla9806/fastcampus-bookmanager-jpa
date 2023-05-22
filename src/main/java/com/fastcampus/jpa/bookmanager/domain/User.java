@@ -30,7 +30,14 @@ public class User extends BaseEntity {
     private Gender gender;
     @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", insertable = false, updatable = false) // 어떤 속성으로 join을 할 것인지 결정 + read only로 설정
+    @ToString.Exclude
     private List<UserHistory> userHistories = new ArrayList<>();
+
+    @OneToMany
+    @JoinColumn(name = "user_id")
+    @ToString.Exclude
+    private List<Review> reviews = new ArrayList<>();
+
     @Transient // 영속 대상에서 제외
     private String testData;
 

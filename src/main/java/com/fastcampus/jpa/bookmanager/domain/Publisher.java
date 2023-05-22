@@ -1,27 +1,28 @@
 package com.fastcampus.jpa.bookmanager.domain;
 
-import com.fastcampus.jpa.bookmanager.domain.listener.Auditable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
+@NoArgsConstructor
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-@NoArgsConstructor
 @Entity
-@EntityListeners(value = AuditingEntityListener.class)
-public class UserHistory extends BaseEntity {
+public class Publisher extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String email;
 
-    @ManyToOne
-    private User user;
+    private String name;
+
+    @OneToMany
+    @JoinColumn(name = "publisher_id")
+    @ToString.Exclude
+    private List<Book> books = new ArrayList<>();
 }
