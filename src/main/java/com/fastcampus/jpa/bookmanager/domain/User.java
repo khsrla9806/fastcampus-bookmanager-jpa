@@ -5,6 +5,8 @@ import com.fastcampus.jpa.bookmanager.domain.listener.UserEntityListener;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @ToString(callSuper = true)
@@ -26,6 +28,9 @@ public class User extends BaseEntity {
     private String email;
     @Enumerated(value = EnumType.STRING) // default가 Ordinal
     private Gender gender;
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", insertable = false, updatable = false) // 어떤 속성으로 join을 할 것인지 결정 + read only로 설정
+    private List<UserHistory> userHistories = new ArrayList<>();
     @Transient // 영속 대상에서 제외
     private String testData;
 

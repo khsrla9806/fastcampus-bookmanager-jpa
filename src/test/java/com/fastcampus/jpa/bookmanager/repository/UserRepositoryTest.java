@@ -207,6 +207,13 @@ class UserRepositoryTest {
         user.setEmail("userHistoryTest@naver.com");
         userRepository.save(user);
 
-        userHistoryRepository.findAll().forEach(System.out::println);
+        user.setName("userHistoryTest");
+        userRepository.save(user);
+
+        // userHistoryRepository.findAll().forEach(System.out::println);
+        userRepository.findByEmail("userHistoryTest@naver.com")
+                .orElseThrow(RuntimeException::new)
+                .getUserHistories()
+                .forEach(System.out::println);
     }
 }
