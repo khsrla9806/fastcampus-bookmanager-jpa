@@ -1,6 +1,5 @@
 package com.fastcampus.jpa.bookmanager.domain;
 
-import com.fastcampus.jpa.bookmanager.domain.listener.Auditable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,30 +15,20 @@ import java.util.List;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Entity
-public class Book extends BaseEntity {
+public class Author extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
-    private String category;
 
-    @OneToOne(mappedBy = "book")
-    @ToString.Exclude // 순환참조 문제 = 양방향성 참조에 의해서 발생
-    private BookReviewInfo bookReviewInfo;
-
-    @ManyToOne
-    private Publisher publisher;
+    private String country;
 
     // @ManyToMany
     @OneToMany
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "author_id")
     @ToString.Exclude
     private List<BookAndAuthor> bookAndAuthors = new ArrayList<>();
-
-    @OneToMany
-    @JoinColumn(name = "book_id")
-    @ToString.Exclude
-    private List<Review> reviews = new ArrayList<>();
 
     public void addBookAndAuthor(BookAndAuthor... bookAndAuthor) {
         Collections.addAll(this.bookAndAuthors, bookAndAuthor);
