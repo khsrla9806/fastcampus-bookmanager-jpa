@@ -7,6 +7,12 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: create-drop
   datasource:
-    url: "jdbc:h2:mem:test"
-    driver-class-name: org.h2.Driver
+    username: root
+    password: root1234
+    url: jdbc:mysql://localhost:3306/book_manager
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    initialization-mode: always

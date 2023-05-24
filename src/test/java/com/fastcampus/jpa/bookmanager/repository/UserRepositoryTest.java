@@ -16,6 +16,7 @@ import static com.fastcampus.jpa.bookmanager.domain.Gender.MALE;
 import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.endsWith;
 
 @SpringBootTest
+@Transactional
 class UserRepositoryTest {
 
     @Autowired
