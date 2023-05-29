@@ -21,8 +21,11 @@ public class Publisher extends BaseEntity {
 
     private String name;
 
-    @OneToMany
-    @JoinColumn(name = "publisher_id")
+    @OneToMany(mappedBy = "publisher", cascade = CascadeType.PERSIST, orphanRemoval = true)
     @ToString.Exclude
     private List<Book> books = new ArrayList<>();
+
+    public void addBook(Book book) {
+        this.books.add(book);
+    }
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.List;
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
 @Entity
+@Where(clause = "deleted = false")
 public class Book extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,11 +25,14 @@ public class Book extends BaseEntity {
     private String name;
     private String category;
 
+    private boolean deleted;
+
     @OneToOne(mappedBy = "book")
     @ToString.Exclude // 순환참조 문제 = 양방향성 참조에 의해서 발생
     private BookReviewInfo bookReviewInfo;
 
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.ALL })
+    @JoinColumn
     private Publisher publisher;
 
     // @ManyToMany
