@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @SpringBootTest
 public class BookRepositoryTest {
 
@@ -86,6 +88,45 @@ public class BookRepositoryTest {
             - CascadeType.REMOVE에서는 부모 엔티티에서 자식을 삭제하더라도, 해당 자식이 삭제되지는 않음. 즉, 고아 엔티티를 삭제하지 않음
             - orphanRemoval = true에서는 부모에서 자식을 삭제하면, 자식 엔티티는 고아가 되기 때문에 이를 모두 제거해줌
         */
+    }
+
+    @Test
+    void queryTest() {
+        Book book = new Book();
+        book.setName("JPA의 정석");
+        bookRepository.save(book);
+
+        System.out.println(">>>"
+                + bookRepository.findByCategoryIsNullAndNameEqualsAndCreatedAtGreaterThanEqualAndUpdatedAtGreaterThanEqual(
+                        "JPA의 정석", LocalDateTime.now().minusDays(1L), LocalDateTime.now().minusDays(1L)
+        ));
+
+        System.out.println(">>> "
+                + bookRepository.findByNameRecently(
+                "JPA의 정석", LocalDateTime.now().minusDays(1L), LocalDateTime.now().minusDays(1L)
+        ));
+    }
+
+    @Test
+    void nativeQueryTest() {
+        Book book1 = new Book();
+        book1.setName("JPA의 정석");
+        bookRepository.save(book1);
+
+        Book book2 = new Book();
+        book2.setName("JAVA의 정석");
+        bookRepository.save(book2);
+
+        bookRepository.updateCategories();
+        System.out.println(">>> " + bookRepository.findAllCustom());
+
+        /*
+            Native Query를 사용하면 특정 DB에 의존하는 개발을 하기 때문에 많이 사용하는 것은 좋지 않을 수 있다.
+            하지만 성능적인면에서 Native Query를 사용하기도 한다.
+            - JPA를 거쳐 지나가면 select를 실행하고, delete를 실행하고 이런 경우가 많다.
+            - 이렇게 되면 삭제를 할 때마다 select를 수행하고, 삭제를 진행하기 떄문에 성능이 많이 떨어진다.
+            - 이때는 한번의 쿼리를 사용해서 할 수 있도록 Native Query를 사용하는 경우가 있다.
+         */
     }
 
     private void givenBookAndReview() {
