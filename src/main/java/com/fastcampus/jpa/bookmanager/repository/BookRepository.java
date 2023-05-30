@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 public interface BookRepository extends JpaRepository<Book, Long> {
     Book findFirstByName(String name);
@@ -37,4 +38,7 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Modifying
     @Query(value = "update book set category='개발 서적'", nativeQuery = true)
     int updateCategories();
+
+    @Query(value = "select * from book order by id desc limit 1", nativeQuery = true)
+    Map<String, Object> findRawRecord();
 }

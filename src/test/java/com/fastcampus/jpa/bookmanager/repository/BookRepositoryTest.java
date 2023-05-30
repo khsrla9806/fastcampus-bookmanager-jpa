@@ -4,6 +4,7 @@ import com.fastcampus.jpa.bookmanager.domain.Book;
 import com.fastcampus.jpa.bookmanager.domain.Publisher;
 import com.fastcampus.jpa.bookmanager.domain.Review;
 import com.fastcampus.jpa.bookmanager.domain.User;
+import com.fastcampus.jpa.bookmanager.repository.dto.BookStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -127,6 +128,27 @@ public class BookRepositoryTest {
             - 이렇게 되면 삭제를 할 때마다 select를 수행하고, 삭제를 진행하기 떄문에 성능이 많이 떨어진다.
             - 이때는 한번의 쿼리를 사용해서 할 수 있도록 Native Query를 사용하는 경우가 있다.
          */
+    }
+
+    @Test
+    void converterTest() {
+        Book book1 = new Book();
+        book1.setName("JPA의 정석");
+        book1.setStatus(new BookStatus(100));
+        bookRepository.save(book1);
+
+        Book book2 = new Book();
+        book2.setName("JAVA의 정석");
+        book2.setStatus(new BookStatus(200));
+        bookRepository.save(book2);
+
+        Book book3 = new Book();
+        book3.setName("SPRING의 정석");
+        book3.setStatus(new BookStatus(100));
+        bookRepository.save(book3);
+
+        // DB에 int로 저장이 되었는지 Native 쿼리를 사용
+        System.out.println(">>> " + bookRepository.findRawRecord().values());
     }
 
     private void givenBookAndReview() {
