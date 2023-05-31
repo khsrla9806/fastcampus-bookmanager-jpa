@@ -1,7 +1,9 @@
 package com.fastcampus.jpa.bookmanager.repository;
 
+import com.fastcampus.jpa.bookmanager.domain.Address;
 import com.fastcampus.jpa.bookmanager.domain.User;
 import org.assertj.core.util.Lists;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -218,5 +220,23 @@ class UserRepositoryTest {
                 .forEach(System.out::println);
 
         System.out.println("(User) => " + userHistoryRepository.findAll().get(0));
+    }
+
+    @DisplayName("Embedded Class인 Address에 대한 테스트")
+    @Test
+    void embedTest() {
+        User user = new User();
+        user.setName("Test User");
+        // 집 주소 저장
+        user.setHomeAddress(new Address("수원시", "영통구", "샬라샬라", "15670"));
+
+        // 회사 주소 저장
+        user.setCompanyAddress(new Address("서울시", "동작구", "샬라샬라", "12300"));
+
+        userRepository.save(user);
+
+        // 조회
+        userRepository.findAll().forEach(System.out::println);
+        userHistoryRepository.findAll().forEach(System.out::println);
     }
 }
